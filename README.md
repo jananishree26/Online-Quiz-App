@@ -9,25 +9,6 @@ The **Online Quiz App Management System** is a database-driven application that 
 - Leaderboard system  
 - Admin panel for question management  
 
-🖥️ Screenshots  
-
-### 🔹 Home Page  
-![Home Page]("C:\Users\janan\OneDrive\Pictures\Saved Pictures\Camera Roll\Screenshot (61).png")  
-
-### 🔹 Quiz Page  
-![Quiz Page]("C:\Users\janan\OneDrive\Pictures\Saved Pictures\Camera Roll\Screenshot (65).png")  
-
-### 🔹 Result Page  
-![Result Page]("C:\Users\janan\OneDrive\Pictures\Saved Pictures\Camera Roll\Screenshot (67).png")  
-
----
-
-## 🚀 Live Demo  
-
-👉 [Click here to try the live demo]("https://C:\Users\janan\OneDrive\Desktop\Webdevelopment\quiz-app.html")  
-
----
-
 ## 🛠️ Tech Stack  
 - **Frontend:** HTML, CSS, JavaScript  
 - **Backend:** Java / Python / PHP (your version)  
