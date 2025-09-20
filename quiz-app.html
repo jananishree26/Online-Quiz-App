@@ -1,0 +1,3081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Online Quiz App</title>
+<style>
+/* Reset and base styles */
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+/* Attractive gradient background */
+background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+min-height: 100vh;
+padding: 20px;
+color: #333;
+}
+
+.container {
+max-width: 1000px;
+margin: 0 auto;
+}
+
+.card {
+background-color: rgba(255, 255, 255, 0.95);
+border-radius: 12px;
+box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+margin-bottom: 20px;
+overflow: hidden;
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+transform: translateY(-5px);
+box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+}
+
+.card-header {
+padding: 20px;
+border-bottom: 1px solid #eee;
+background: linear-gradient(to right, #f8f9fa, #e9ecef);
+}
+
+.card-title {
+font-size: 1.5rem;
+font-weight: bold;
+color: #4361ee;
+margin-bottom: 5px;
+}
+
+.card-content {
+padding: 20px;
+}
+
+.card-footer {
+padding: 15px 20px;
+border-top: 1px solid #eee;
+display: flex;
+justify-content: space-between;
+background: linear-gradient(to right, #f8f9fa, #e9ecef);
+}
+
+/* Form styles */
+.form-group {
+margin-bottom: 15px;
+}
+
+label {
+display: block;
+margin-bottom: 5px;
+font-weight: 500;
+color: #4361ee;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+textarea,
+select {
+width: 100%;
+padding: 12px;
+border: 1px solid #ddd;
+border-radius: 8px;
+font-size: 1rem;
+transition: border-color 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+textarea:focus,
+select:focus {
+border-color: #4361ee;
+outline: none;
+box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+}
+
+/* Button styles */
+.btn {
+padding: 12px 20px;
+border: none;
+border-radius: 8px;
+cursor: pointer;
+font-weight: 600;
+transition: all 0.3s ease;
+text-transform: uppercase;
+letter-spacing: 0.5px;
+}
+
+.btn-primary {
+background: linear-gradient(to right, #4361ee, #3f37c9);
+color: white;
+}
+
+.btn-primary:hover {
+background: linear-gradient(to right, #3f37c9, #3a0ca3);
+transform: translateY(-2px);
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-outline {
+background-color: transparent;
+border: 2px solid #4361ee;
+color: #4361ee;
+}
+
+.btn-outline:hover {
+background-color: #4361ee;
+color: white;
+transform: translateY(-2px);
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-block {
+display: block;
+width: 100%;
+margin-bottom: 10px;
+}
+
+.btn-green {
+background: linear-gradient(to right, #10b981, #059669);
+color: white;
+}
+
+.btn-green:hover {
+background: linear-gradient(to right, #059669, #047857);
+}
+
+.btn-yellow {
+background: linear-gradient(to right, #f59e0b, #d97706);
+color: white;
+}
+
+.btn-yellow:hover {
+background: linear-gradient(to right, #d97706, #b45309);
+}
+
+.btn-red {
+background: linear-gradient(to right, #ef4444, #dc2626);
+color: white;
+}
+
+.btn-red:hover {
+background: linear-gradient(to right, #dc2626, #b91c1c);
+}
+
+.btn-sm {
+padding: 8px 12px;
+font-size: 0.875rem;
+}
+
+/* Alert styles */
+.alert {
+padding: 12px 15px;
+border-radius: 8px;
+margin-bottom: 15px;
+}
+
+.alert-error {
+background-color: #fee2e2;
+border: 1px solid #fecaca;
+color: #b91c1c;
+}
+
+.alert-success {
+background-color: #d1fae5;
+border: 1px solid #a7f3d0;
+color: #065f46;
+}
+
+.alert-info {
+background-color: #e0f2fe;
+border: 1px solid #bae6fd;
+color: #0369a1;
+}
+
+/* Welcome page styles */
+.welcome-header {
+text-align: center;
+margin-bottom: 30px;
+color: white;
+text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.welcome-title {
+font-size: 3rem;
+margin-bottom: 15px;
+background: linear-gradient(to right, #ffffff, #e0e0e0);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+}
+
+.welcome-subtitle {
+font-size: 1.3rem;
+color: rgba(255, 255, 255, 0.9);
+}
+
+.welcome-buttons {
+display: flex;
+flex-direction: column;
+align-items: center;
+margin-top: 30px;
+}
+
+.welcome-button {
+padding: 15px 30px;
+font-size: 1.1rem;
+width: 200px;
+margin-bottom: 15px;
+}
+
+/* Dashboard styles */
+.dashboard-actions {
+display: flex;
+justify-content: space-between;
+margin-top: 20px;
+}
+
+.dashboard-action-btn {
+padding: 12px 20px;
+font-size: 1rem;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+/* Category styles */
+.category-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 20px;
+}
+
+.category-card {
+text-align: center;
+padding: 20px;
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+cursor: pointer;
+}
+
+.category-card:hover {
+transform: translateY(-5px);
+box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.category-card.easy {
+background: linear-gradient(to bottom, #d1fae5, #a7f3d0);
+}
+
+.category-card.medium {
+background: linear-gradient(to bottom, #fef3c7, #fde68a);
+}
+
+.category-card.hard {
+background: linear-gradient(to bottom, #fee2e2, #fecaca);
+}
+
+/* Badge styles */
+.badge {
+display: inline-block;
+padding: 6px 12px;
+border-radius: 9999px;
+font-size: 0.75rem;
+font-weight: 600;
+margin-top: 8px;
+}
+
+.badge-green {
+background-color: #10b981;
+color: white;
+}
+
+.badge-yellow {
+background-color: #f59e0b;
+color: white;
+}
+
+.badge-red {
+background-color: #ef4444;
+color: white;
+}
+
+.badge-blue {
+background-color: #3b82f6;
+color: white;
+}
+
+.badge-purple {
+background-color: #8b5cf6;
+color: white;
+}
+
+/* Progress bar */
+.progress-container {
+width: 100%;
+height: 10px;
+background-color: #e5e7eb;
+border-radius: 8px;
+margin-bottom: 20px;
+overflow: hidden;
+}
+
+.progress-bar {
+height: 100%;
+background: linear-gradient(to right, #4361ee, #3a0ca3);
+border-radius: 8px;
+transition: width 0.3s ease;
+}
+
+/* Radio buttons */
+.radio-group {
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+
+.radio-item {
+display: flex;
+align-items: center;
+padding: 12px;
+border: 1px solid #ddd;
+border-radius: 8px;
+cursor: pointer;
+transition: all 0.2s;
+}
+
+.radio-item:hover {
+background-color: #f9fafb;
+border-color: #4361ee;
+}
+
+.radio-item.selected {
+background-color: #eff6ff;
+border-color: #4361ee;
+}
+
+.radio-item input {
+margin-right: 10px;
+}
+
+/* Quiz result styles */
+.result-summary {
+text-align: center;
+margin-bottom: 30px;
+}
+
+.result-score {
+font-size: 3.5rem;
+font-weight: bold;
+color: #4361ee;
+margin-bottom: 10px;
+text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.question-summary {
+border: 1px solid #ddd;
+border-radius: 8px;
+padding: 15px;
+margin-bottom: 15px;
+background-color: #f8f9fa;
+}
+
+.question-text {
+font-weight: 600;
+margin-bottom: 10px;
+color: #4361ee;
+}
+
+.option {
+padding: 10px 12px;
+border-radius: 6px;
+margin-bottom: 5px;
+}
+
+.option-correct {
+background-color: #d1fae5;
+border: 1px solid #a7f3d0;
+}
+
+.option-incorrect {
+background-color: #fee2e2;
+border: 1px solid #fecaca;
+}
+
+.option-normal {
+background-color: #f9fafb;
+border: 1px solid #e5e7eb;
+}
+
+/* Achievement badges */
+.achievement-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+gap: 15px;
+margin-top: 20px;
+}
+
+.achievement-badge {
+display: flex;
+flex-direction: column;
+align-items: center;
+text-align: center;
+padding: 15px;
+border-radius: 8px;
+background-color: #f9fafb;
+border: 1px solid #e5e7eb;
+transition: all 0.3s ease;
+}
+
+.achievement-badge:hover {
+transform: translateY(-5px);
+box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.achievement-badge.locked {
+opacity: 0.6;
+filter: grayscale(1);
+}
+
+.achievement-icon {
+font-size: 2rem;
+margin-bottom: 10px;
+}
+
+.achievement-title {
+font-size: 0.875rem;
+font-weight: 600;
+margin-bottom: 5px;
+}
+
+.achievement-desc {
+font-size: 0.75rem;
+color: #6b7280;
+}
+
+/* Profile styles */
+.profile-header {
+display: flex;
+align-items: center;
+gap: 20px;
+margin-bottom: 20px;
+}
+
+.profile-avatar {
+width: 100px;
+height: 100px;
+border-radius: 50%;
+background-color: #e5e7eb;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 2.5rem;
+font-weight: bold;
+color: #4361ee;
+background: linear-gradient(to bottom right, #4361ee, #3a0ca3);
+color: white;
+}
+
+.profile-info {
+flex: 1;
+}
+
+.profile-name {
+font-size: 1.5rem;
+font-weight: bold;
+margin-bottom: 5px;
+}
+
+.profile-username {
+color: #6b7280;
+margin-bottom: 10px;
+}
+
+.profile-stats {
+display: flex;
+gap: 20px;
+}
+
+.profile-stat {
+text-align: center;
+}
+
+.profile-stat-value {
+font-size: 1.25rem;
+font-weight: bold;
+color: #4361ee;
+}
+
+.profile-stat-label {
+font-size: 0.875rem;
+color: #6b7280;
+}
+
+/* Tabs */
+.tabs {
+display: flex;
+border-bottom: 1px solid #e5e7eb;
+margin-bottom: 20px;
+}
+
+.tab {
+padding: 10px 20px;
+cursor: pointer;
+border-bottom: 2px solid transparent;
+transition: all 0.3s ease;
+}
+
+.tab:hover {
+color: #4361ee;
+}
+
+.tab.active {
+color: #4361ee;
+border-bottom-color: #4361ee;
+font-weight: 600;
+}
+
+.tab-content {
+display: none;
+}
+
+.tab-content.active {
+display: block;
+}
+
+/* Analytics styles */
+.analytics-grid {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 20px;
+margin-bottom: 20px;
+}
+
+.analytics-card {
+padding: 20px;
+border-radius: 8px;
+background-color: #f9fafb;
+border: 1px solid #e5e7eb;
+}
+
+.analytics-title {
+font-size: 1rem;
+font-weight: 600;
+margin-bottom: 10px;
+color: #4361ee;
+}
+
+.analytics-value {
+font-size: 2rem;
+font-weight: bold;
+margin-bottom: 5px;
+}
+
+.analytics-subtitle {
+font-size: 0.875rem;
+color: #6b7280;
+}
+
+.chart-container {
+height: 300px;
+margin-top: 20px;
+position: relative;
+}
+
+/* Match question styles */
+.match-container {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 20px;
+}
+
+.match-item {
+padding: 12px;
+border: 1px solid #ddd;
+border-radius: 8px;
+background-color: #f9fafb;
+margin-bottom: 10px;
+cursor: pointer;
+transition: all 0.2s;
+}
+
+.match-item:hover {
+background-color: #eff6ff;
+border-color: #4361ee;
+}
+
+.match-item.selected {
+background-color: #eff6ff;
+border-color: #4361ee;
+box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.3);
+}
+
+.match-item.matched {
+background-color: #d1fae5;
+border-color: #a7f3d0;
+cursor: default;
+}
+
+/* Fill in the blank styles */
+.fill-blank {
+display: inline-block;
+min-width: 100px;
+padding: 5px 10px;
+border-bottom: 2px solid #4361ee;
+margin: 0 5px;
+}
+
+/* Daily challenge styles */
+.daily-challenge {
+background: linear-gradient(to bottom right, #8b5cf6, #6366f1);
+color: white;
+padding: 20px;
+border-radius: 12px;
+margin-bottom: 20px;
+position: relative;
+overflow: hidden;
+}
+
+.daily-challenge::before {
+content: '';
+position: absolute;
+top: -50%;
+left: -50%;
+width: 200%;
+height: 200%;
+background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+z-index: 0;
+}
+
+.daily-challenge-content {
+position: relative;
+z-index: 1;
+}
+
+.daily-challenge-title {
+font-size: 1.25rem;
+font-weight: bold;
+margin-bottom: 10px;
+}
+
+.daily-challenge-desc {
+margin-bottom: 15px;
+opacity: 0.9;
+}
+
+.daily-challenge-timer {
+font-size: 0.875rem;
+margin-bottom: 15px;
+}
+
+/* Notification styles */
+.notification {
+position: fixed;
+bottom: 20px;
+right: 20px;
+padding: 15px 20px;
+background-color: white;
+border-radius: 8px;
+box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+z-index: 1000;
+transform: translateY(100px);
+opacity: 0;
+transition: all 0.3s ease;
+}
+
+.notification.show {
+transform: translateY(0);
+opacity: 1;
+}
+
+.notification-title {
+font-weight: 600;
+margin-bottom: 5px;
+}
+
+.notification-message {
+font-size: 0.875rem;
+color: #6b7280;
+}
+
+/* Utility classes */
+.text-center {
+text-align: center;
+}
+
+.text-right {
+text-align: right;
+}
+
+.mt-2 {
+margin-top: 10px;
+}
+
+.mt-4 {
+margin-top: 20px;
+}
+
+.mb-2 {
+margin-bottom: 10px;
+}
+
+.mb-4 {
+margin-bottom: 20px;
+}
+
+.flex {
+display: flex;
+}
+
+.justify-between {
+justify-content: space-between;
+}
+
+.justify-center {
+justify-content: center;
+}
+
+.items-center {
+align-items: center;
+}
+
+.gap-2 {
+gap: 10px;
+}
+
+.text-sm {
+font-size: 0.875rem;
+}
+
+.font-bold {
+font-weight: bold;
+}
+
+.text-gray-500 {
+color: #6b7280;
+}
+
+.hidden {
+display: none;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+.category-grid {
+    grid-template-columns: 1fr;
+}
+
+.card-footer {
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn {
+    width: 100%;
+}
+
+.dashboard-actions {
+    flex-direction: column;
+    gap: 10px;
+}
+
+.analytics-grid {
+    grid-template-columns: 1fr;
+}
+
+.profile-header {
+    flex-direction: column;
+    text-align: center;
+}
+
+.profile-stats {
+    justify-content: center;
+}
+
+.match-container {
+    grid-template-columns: 1fr;
+}
+}
+</style>
+</head>
+<body>
+<div id="app">
+<!-- Welcome Page with Login and Register buttons stacked vertically -->
+<div id="welcomePage" class="container">
+    <div class="welcome-header">
+        <h1 class="welcome-title">Welcome to Online Quiz App</h1>
+        <p class="welcome-subtitle">Test your knowledge with our interactive quizzes</p>
+    </div>
+    
+    <div class="card" style="max-width: 400px; margin: 0 auto;">
+        <div class="card-content">
+            <p class="text-center mb-4">Get started by logging in or creating a new account</p>
+            
+            <div class="welcome-buttons">
+                <button id="loginBtn" class="btn btn-primary welcome-button" onclick="showLoginPage()">Login</button>
+                <button id="registerBtn" class="btn btn-outline welcome-button" onclick="showRegisterPage()">Register</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Login Page -->
+<div id="loginPage" class="container" style="display: none;">
+    <div class="card" style="max-width: 400px; margin: 100px auto;">
+        <div class="card-header">
+            <h2 class="card-title text-center">Login</h2>
+            <p class="text-center text-gray-500">Enter your credentials to access your account</p>
+        </div>
+        <div class="card-content">
+            <form id="loginForm">
+                <div id="loginError" class="alert alert-error hidden"></div>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter your username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                </div>
+                <button type="button" class="btn btn-primary btn-block" onclick="handleLogin()">Login</button>
+            </form>
+        </div>
+        <div class="card-footer justify-center">
+            <button class="btn btn-outline" onclick="showWelcomePage()">Back to Welcome</button>
+        </div>
+    </div>
+</div>
+
+<!-- Register Page -->
+<div id="registerPage" class="container" style="display: none;">
+    <div class="card" style="max-width: 400px; margin: 100px auto;">
+        <div class="card-header">
+            <h2 class="card-title text-center">Register</h2>
+            <p class="text-center text-gray-500">Create a new account to start taking quizzes</p>
+        </div>
+        <div class="card-content">
+            <form id="registerForm">
+                <div id="registerError" class="alert alert-error hidden"></div>
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="regUsername">Username</label>
+                    <input type="text" id="regUsername" placeholder="Choose a username" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">Password</label>
+                    <input type="password" id="regPassword" placeholder="Choose a password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+                </div>
+                <button type="button" class="btn btn-primary btn-block" onclick="handleRegister()">Register</button>
+            </form>
+        </div>
+        <div class="card-footer justify-center">
+            <button class="btn btn-outline" onclick="showWelcomePage()">Back to Welcome</button>
+        </div>
+    </div>
+</div>
+
+<!-- Dashboard Page -->
+<div id="dashboardPage" class="container" style="display: none;">
+    <div class="flex justify-between items-center mb-4">
+        <h1 class="card-title" style="color: white; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">Welcome, <span id="userDisplayName">User</span>!</h1>
+        <div>
+            <button class="btn btn-outline" style="background-color: rgba(255, 255, 255, 0.9); color: #4361ee; margin-right: 10px;" onclick="showProfilePage()">My Profile</button>
+            <button id="logoutBtn" class="btn btn-outline" style="background-color: rgba(255, 255, 255, 0.9); color: #4361ee;" onclick="handleLogout()">Logout</button>
+        </div>
+    </div>
+    
+    <!-- Daily Challenge Card -->
+    <div class="daily-challenge">
+        <div class="daily-challenge-content">
+            <div class="daily-challenge-title">Daily Challenge</div>
+            <div class="daily-challenge-desc">Complete today's challenge to earn bonus points and special badges!</div>
+            <div class="daily-challenge-timer">Time remaining: <span id="dailyChallengeTimer">23:45:12</span></div>
+            <button class="btn btn-primary" onclick="startDailyChallenge()">Start Challenge</button>
+        </div>
+    </div>
+    
+    <!-- User Stats Summary -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2 class="card-title">Your Stats</h2>
+        </div>
+        <div class="card-content">
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <div class="analytics-title">Total Score</div>
+                    <div class="analytics-value" id="totalScoreValue">750</div>
+                    <div class="analytics-subtitle">Points earned</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="analytics-title">Quizzes Completed</div>
+                    <div class="analytics-value" id="quizzesCompletedValue">12</div>
+                    <div class="analytics-subtitle">Out of 30 available</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="analytics-title">Accuracy</div>
+                    <div class="analytics-value" id="accuracyValue">78%</div>
+                    <div class="analytics-subtitle">Correct answers</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="analytics-title">Current Streak</div>
+                    <div class="analytics-value" id="streakValue">3</div>
+                    <div class="analytics-subtitle">Days in a row</div>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <button class="btn btn-outline" onclick="showAnalyticsPage()">View Detailed Analytics</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Achievements -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <div class="flex justify-between items-center">
+                <h2 class="card-title">Recent Achievements</h2>
+                <button class="btn btn-sm btn-outline" onclick="showAchievementsPage()">View All</button>
+            </div>
+        </div>
+        <div class="card-content">
+            <div class="achievement-grid">
+                <div class="achievement-badge">
+                    <div class="achievement-icon">🏆</div>
+                    <div class="achievement-title">First Quiz</div>
+                    <div class="achievement-desc">Completed your first quiz</div>
+                </div>
+                <div class="achievement-badge">
+                    <div class="achievement-icon">🔥</div>
+                    <div class="achievement-title">On Fire</div>
+                    <div class="achievement-desc">3-day streak</div>
+                </div>
+                <div class="achievement-badge">
+                    <div class="achievement-icon">⭐</div>
+                    <div class="achievement-title">Perfect Score</div>
+                    <div class="achievement-desc">100% on any quiz</div>
+                </div>
+                <div class="achievement-badge locked">
+                    <div class="achievement-icon">🧠</div>
+                    <div class="achievement-title">Quiz Master</div>
+                    <div class="achievement-desc">Complete 10 quizzes</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Select Quiz Category</h2>
+            <p class="text-gray-500">Choose a difficulty level to start your quiz</p>
+        </div>
+        <div class="card-content">
+            <div class="category-grid">
+                <div class="card category-card easy" onclick="selectQuizDifficulty('easy')">
+                    <div class="card-header" style="background: transparent;">
+                        <h3 class="card-title">Easy</h3>
+                        <span class="badge badge-green">10 Questions</span>
+                    </div>
+                    <div class="card-content">
+                        <p class="text-sm">Basic questions with 30 seconds per question.</p>
+                    </div>
+                    <div class="card-footer" style="background: transparent;">
+                        <button class="btn btn-green btn-block" onclick="startQuiz('easy')">Start Easy Quiz</button>
+                    </div>
+                </div>
+                
+                <div class="card category-card medium" onclick="selectQuizDifficulty('medium')">
+                    <div class="card-header" style="background: transparent;">
+                        <h3 class="card-title">Medium</h3>
+                        <span class="badge badge-yellow">10 Questions</span>
+                    </div>
+                    <div class="card-content">
+                        <p class="text-sm">Moderate difficulty with 30 seconds per question.</p>
+                    </div>
+                    <div class="card-footer" style="background: transparent;">
+                        <button class="btn btn-yellow btn-block" onclick="startQuiz('medium')">Start Medium Quiz</button>
+                    </div>
+                </div>
+                
+                <div class="card category-card hard" onclick="selectQuizDifficulty('hard')">
+                    <div class="card-header" style="background: transparent;">
+                        <h3 class="card-title">Hard</h3>
+                        <span class="badge badge-red">10 Questions</span>
+                    </div>
+                    <div class="card-content">
+                        <p class="text-sm">Difficult questions with 30 seconds per question.</p>
+                    </div>
+                    <div class="card-footer" style="background: transparent;">
+                        <button class="btn btn-red btn-block" onclick="startQuiz('hard')">Start Hard Quiz</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="dashboard-actions">
+        <button class="btn btn-outline" style="background-color: rgba(255, 255, 255, 0.9); color: #4361ee;" onclick="showLeaderboard()">View Leaderboard</button>
+        <button class="btn btn-outline" style="background-color: rgba(255, 255, 255, 0.9); color: #4361ee;" onclick="showFeedback()">Provide Feedback</button>
+    </div>
+</div>
+
+<!-- Quiz Start Page -->
+<div id="quizStartPage" class="container" style="display: none;">
+    <div class="card" style="max-width: 600px; margin: 100px auto;">
+        <div class="card-header">
+            <h2 class="card-title text-center">Ready to Start the Quiz?</h2>
+        </div>
+        <div class="card-content">
+            <p class="text-center mb-2">You will have 30 seconds to answer each question.</p>
+            <p class="text-center">There are <span id="questionCount">10</span> questions in total.</p>
+            <p class="text-center mt-4">Difficulty: <strong id="difficultyDisplay">Easy</strong></p>
+            
+            <div class="form-group mt-4">
+                <label for="questionType">Question Type:</label>
+                <select id="questionType" onchange="updateQuizType()">
+                    <option value="multiple-choice">Multiple Choice</option>
+                    <option value="true-false">True/False</option>
+                    <option value="matching">Matching</option>
+                    <option value="fill-blank">Fill in the Blank</option>
+                </select>
+            </div>
+            
+            <div id="quizTypeDescription" class="alert alert-info mt-2">
+                Standard multiple choice questions with four options per question.
+            </div>
+        </div>
+        <div class="card-footer justify-center">
+            <button id="startQuizBtn" class="btn btn-primary" onclick="startQuizNow()">Start Quiz Now</button>
+            <button class="btn btn-outline" onclick="showDashboard()">Back to Dashboard</button>
+        </div>
+    </div>
+</div>
+
+<!-- Quiz Page -->
+<div id="quizPage" class="container" style="display: none;">
+    <div style="max-width: 700px; margin: 0 auto;">
+        <div class="mb-4">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-bold" style="color: white;">
+                    Question <span id="currentQuestionNum">1</span> of <span id="totalQuestions">10</span>
+                </span>
+                <span class="text-sm font-bold" style="color: white;">
+                    Time left: <span id="timer">30</span> seconds
+                </span>
+            </div>
+            <div class="progress-container">
+                <div id="progressBar" class="progress-bar" style="width: 10%"></div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2 id="questionText" class="card-title">Question text goes here?</h2>
+            </div>
+            <div class="card-content">
+                <!-- Multiple Choice Options -->
+                <div id="multipleChoiceOptions" class="radio-group">
+                    <!-- Options will be inserted here by JavaScript -->
+                </div>
+                
+                <!-- True/False Options -->
+                <div id="trueFalseOptions" class="radio-group" style="display: none;">
+                    <div class="radio-item" data-option="0" onclick="selectOption(0)">
+                        <input type="radio" name="tf-option" id="tf-option-0">
+                        <label for="tf-option-0">True</label>
+                    </div>
+                    <div class="radio-item" data-option="1" onclick="selectOption(1)">
+                        <input type="radio" name="tf-option" id="tf-option-1">
+                        <label for="tf-option-1">False</label>
+                    </div>
+                </div>
+                
+                <!-- Matching Options -->
+                <div id="matchingOptions" class="match-container" style="display: none;">
+                    <!-- Matching items will be inserted here by JavaScript -->
+                </div>
+                
+                <!-- Fill in the Blank Options -->
+                <div id="fillBlankOptions" style="display: none;">
+                    <p id="fillBlankText">The capital of France is <span class="fill-blank" contenteditable="true" id="blankAnswer"></span>.</p>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="text-sm font-bold">
+                    Score: <span id="currentScore">0</span>
+                </div>
+                <button id="nextQuestionBtn" class="btn btn-primary" onclick="handleNextQuestion()">Next Question</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Results Page -->
+<div id="resultsPage" class="container" style="display: none;">
+    <div style="max-width: 700px; margin: 0 auto;">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title text-center">Quiz Results</h2>
+            </div>
+            <div class="card-content">
+                <div class="result-summary">
+                    <div id="resultPercentage" class="result-score">85%</div>
+                    <p>You scored <span id="finalScore">8</span> out of <span id="totalQuestionsResult">10</span> questions</p>
+                    
+                    <!-- New Achievement Alert -->
+                    <div id="newAchievementAlert" class="alert alert-success mt-4" style="display: none;">
+                        <div class="text-center">
+                            <div style="font-size: 2rem; margin-bottom: 10px;">🏆</div>
+                            <div class="font-bold">New Achievement Unlocked!</div>
+                            <div id="achievementName">Perfect Score</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Points and XP Summary -->
+                    <div class="card mt-4" style="background-color: #f0f9ff;">
+                        <div class="card-content">
+                            <div class="flex justify-between mb-2">
+                                <div>Base Points:</div>
+                                <div id="basePoints">80</div>
+                            </div>
+                            <div class="flex justify-between mb-2">
+                                <div>Time Bonus:</div>
+                                <div id="timeBonus">+15</div>
+                            </div>
+                            <div class="flex justify-between mb-2">
+                                <div>Streak Bonus:</div>
+                                <div id="streakBonus">+10</div>
+                            </div>
+                            <div class="flex justify-between font-bold" style="border-top: 1px solid #e5e7eb; padding-top: 10px;">
+                                <div>Total Points:</div>
+                                <div id="totalPoints">105</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 class="font-bold mb-2 mt-4">Question Summary</h3>
+                <div id="questionSummary">
+                    <!-- Question summary will be inserted here by JavaScript -->
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="flex justify-center gap-2" style="width: 100%;">
+                    <button class="btn btn-outline" onclick="showDashboard()">Back to Dashboard</button>
+                    <button class="btn btn-outline" onclick="showLeaderboard()">View Leaderboard</button>
+                    <button class="btn btn-primary" onclick="retakeQuiz()">Retake Quiz</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Leaderboard Page -->
+<div id="leaderboardPage" class="container" style="display: none;">
+    <div class="card">
+        <div class="card-header">
+            <div class="flex justify-between items-center">
+                <h2 class="card-title">Leaderboard</h2>
+                <button class="btn btn-outline" onclick="showDashboard()">Back to Dashboard</button>
+            </div>
+        </div>
+        <div class="card-content">
+            <div class="tabs">
+                <div class="tab active" onclick="switchLeaderboardTab('global')">Global</div>
+                <div class="tab" onclick="switchLeaderboardTab('friends')">Friends</div>
+                <div class="tab" onclick="switchLeaderboardTab('weekly')">Weekly</div>
+                <div class="tab" onclick="switchLeaderboardTab('monthly')">Monthly</div>
+            </div>
+            
+            <div class="p-4 bg-blue-50 rounded-lg border-blue-200 mb-4" style="background-color: #eff6ff; border: 1px solid #bfdbfe;">
+                <p class="text-center">
+                    Your current rank: <span id="userRank" class="font-bold">5</span> out of <span id="totalParticipants">100</span> participants
+                </p>
+            </div>
+            
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background-color: #f8f9fa; border-bottom: 2px solid #e5e7eb;">
+                        <th style="padding: 12px 15px; text-align: center;">Rank</th>
+                        <th style="padding: 12px 15px; text-align: left;">Name</th>
+                        <th style="padding: 12px 15px; text-align: left;">Username</th>
+                        <th style="padding: 12px 15px; text-align: right;">Score</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboardTable">
+                    <!-- Leaderboard entries will be inserted here by JavaScript -->
+                </tbody>
+            </table>
+            
+            <div class="mt-4 flex justify-center gap-2">
+                <button id="showMoreBtn" class="btn btn-outline" onclick="showAllParticipants()">Show All 100 Participants</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Feedback Page -->
+<div id="feedbackPage" class="container" style="display: none;">
+    <div style="max-width: 600px; margin: 0 auto;">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Feedback</h2>
+                <p class="text-gray-500">We value your feedback! Please let us know how we can improve.</p>
+            </div>
+            <div class="card-content">
+                <form id="feedbackForm">
+                    <div class="mb-4">
+                        <label>How would you rate your experience?</label>
+                        <div class="flex justify-between mt-2">
+                            <div class="text-center">
+                                <input type="radio" name="rating" id="rating-1" value="1">
+                                <label for="rating-1" class="block">1</label>
+                            </div>
+                            <div class="text-center">
+                                <input type="radio" name="rating" id="rating-2" value="2">
+                                <label for="rating-2" class="block">2</label>
+                            </div>
+                            <div class="text-center">
+                                <input type="radio" name="rating" id="rating-3" value="3" checked>
+                                <label for="rating-3" class="block">3</label>
+                            </div>
+                            <div class="text-center">
+                                <input type="radio" name="rating" id="rating-4" value="4">
+                                <label for="rating-4" class="block">4</label>
+                            </div>
+                            <div class="text-center">
+                                <input type="radio" name="rating" id="rating-5" value="5">
+                                <label for="rating-5" class="block">5</label>
+                            </div>
+                        </div>
+                        <div class="flex justify-between text-sm text-gray-500 mt-1">
+                            <span>Poor</span>
+                            <span>Excellent</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="feedbackCategory">What aspect are you providing feedback on?</label>
+                        <select id="feedbackCategory" class="mt-2">
+                            <option value="quiz-content">Quiz Content</option>
+                            <option value="user-interface">User Interface</option>
+                            <option value="technical-issues">Technical Issues</option>
+                            <option value="feature-request">Feature Request</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="comment">Additional Comments</label>
+                        <textarea id="comment" rows="5" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;" placeholder="Please share your thoughts about the quiz..."></textarea>
+                    </div>
+                    
+                    <button type="button" class="btn btn-primary btn-block" onclick="submitFeedback()">Submit Feedback</button>
+                </form>
+            </div>
+            <div class="card-footer justify-center">
+                <button class="btn btn-outline" onclick="showDashboard()">Back to Dashboard</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Profile Page -->
+<div id="profilePage" class="container" style="display: none;">
+    <div class="card">
+        <div class="card-header">
+            <div class="flex justify-between items-center">
+                <h2 class="card-title">My Profile</h2>
+                <button class="btn btn-outline" onclick="showDashboard()">Back to Dashboard</button>
+            </div>
+        </div>
+        <div class="card-content">
+            <div class="profile-header">
+                <div class="profile-avatar" id="profileAvatar">AS</div>
+                <div class="profile-info">
+                    <div class="profile-name" id="profileName">Amar Singh</div>
+                    <div class="profile-username" id="profileUsername">@amar_singh</div>
+                    <div class="profile-stats">
+                        <div class="profile-stat">
+                            <div class="profile-stat-value" id="profileQuizCount">15</div>
+                            <div class="profile-stat-label">Quizzes</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="profile-stat-value" id="profileScore">750</div>
+                            <div class="profile-stat-label">Points</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="profile-stat-value" id="profileRank">5</div>
+                            <div class="profile-stat-label">Rank</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="profile-stat-value" id="profileBadges">7</div>
+                            <div class="profile-stat-label">Badges</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tabs">
+                <div class="tab active" onclick="switchProfileTab('achievements')">Achievements</div>
+                <div class="tab" onclick="switchProfileTab('history')">Quiz History</div>
+                <div class="tab" onclick="switchProfileTab('stats')">Statistics</div>
+                <div class="tab" onclick="switchProfileTab('settings')">Settings</div>
+            </div>
+            
+            <!-- Achievements Tab -->
+            <div id="achievementsTab" class="tab-content active">
+                <h3 class="font-bold mb-2">Your Achievements</h3>
+                <div class="achievement-grid">
+                    <div class="achievement-badge">
+                        <div class="achievement-icon">🏆</div>
+                        <div class="achievement-title">First Quiz</div>
+                        <div class="achievement-desc">Completed your first quiz</div>
+                    </div>
+                    <div class="achievement-badge">
+                        <div class="achievement-icon">🔥</div>
+                        <div class="achievement-title">On Fire</div>
+                        <div class="achievement-desc">3-day streak</div>
+                    </div>
+                    <div class="achievement-badge">
+                        <div class="achievement-icon">⭐</div>
+                        <div class="achievement-title">Perfect Score</div>
+                        <div class="achievement-desc">100% on any quiz</div>
+                    </div>
+                    <div class="achievement-badge locked">
+                        <div class="achievement-icon">🧠</div>
+                        <div class="achievement-title">Quiz Master</div>
+                        <div class="achievement-desc">Complete 10 quizzes</div>
+                    </div>
+                    <div class="achievement-badge locked">
+                        <div class="achievement-icon">🚀</div>
+                        <div class="achievement-title">Speed Demon</div>
+                        <div class="achievement-desc">Answer 10 questions in under 10 seconds each</div>
+                    </div>
+                    <div class="achievement-badge locked">
+                        <div class="achievement-icon">📚</div>
+                        <div class="achievement-title">Bookworm</div>
+                        <div class="achievement-desc">Complete quizzes in all categories</div>
+                    </div>
+                    <div class="achievement-badge locked">
+                        <div class="achievement-icon">🏅</div>
+                        <div class="achievement-title">Top 10</div>
+                        <div class="achievement-desc">Reach top 10 on the leaderboard</div>
+                    </div>
+                    <div class="achievement-badge locked">
+                        <div class="achievement-icon">💯</div>
+                        <div class="achievement-title">Perfect Week</div>
+                        <div class="achievement-desc">Complete a quiz every day for a week</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quiz History Tab -->
+            <div id="historyTab" class="tab-content">
+                <h3 class="font-bold mb-2">Your Quiz History</h3>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background-color: #f8f9fa; border-bottom: 2px solid #e5e7eb;">
+                            <th style="padding: 12px 15px; text-align: left;">Date</th>
+                            <th style="padding: 12px 15px; text-align: left;">Quiz</th>
+                            <th style="padding: 12px 15px; text-align: center;">Score</th>
+                            <th style="padding: 12px 15px; text-align: center;">Time</th>
+                            <th style="padding: 12px 15px; text-align: center;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="quizHistoryTable">
+                        <tr style="border-bottom: 1px solid #e5e7eb;">
+                            <td style="padding: 12px 15px;">May 19, 2025</td>
+                            <td style="padding: 12px 15px;">Hard Quiz</td>
+                            <td style="padding: 12px 15px; text-align: center;">85%</td>
+                            <td style="padding: 12px 15px; text-align: center;">12:45</td>
+                            <td style="padding: 12px 15px; text-align: center;">
+                                <button class="btn btn-sm btn-outline">View</button>
+                            </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e5e7eb;">
+                            <td style="padding: 12px 15px;">May 18, 2025</td>
+                            <td style="padding: 12px 15px;">Medium Quiz</td>
+                            <td style="padding: 12px 15px; text-align: center;">92%</td>
+                            <td style="padding: 12px 15px; text-align: center;">10:30</td>
+                            <td style="padding: 12px 15px; text-align: center;">
+                                <button class="btn btn-sm btn-outline">View</button>
+                            </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e5e7eb;">
+                            <td style="padding: 12px 15px;">May 17, 2025</td>
+                            <td style="padding: 12px 15px;">Easy Quiz</td>
+                            <td style="padding: 12px 15px; text-align: center;">100%</td>
+                            <td style="padding: 12px 15px; text-align: center;">8:20</td>
+                            <td style="padding: 12px 15px; text-align: center;">
+                                <button class="btn btn-sm btn-outline">View</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Statistics Tab -->
+            <div id="statsTab" class="tab-content">
+                <h3 class="font-bold mb-2">Your Statistics</h3>
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <div class="analytics-title">Average Score</div>
+                        <div class="analytics-value">82%</div>
+                        <div class="analytics-subtitle">Across all quizzes</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-title">Best Category</div>
+                        <div class="analytics-value">Science</div>
+                        <div class="analytics-subtitle">95% accuracy</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-title">Needs Improvement</div>
+                        <div class="analytics-value">History</div>
+                        <div class="analytics-subtitle">65% accuracy</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-title">Fastest Time</div>
+                        <div class="analytics-value">8.2s</div>
+                        <div class="analytics-subtitle">Average per question</div>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <div style="text-align: center; padding-top: 120px; color: #6b7280;">
+                        Performance chart will be displayed here
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Settings Tab -->
+            <div id="settingsTab" class="tab-content">
+                <h3 class="font-bold mb-2">Account Settings</h3>
+                <form id="profileSettingsForm">
+                    <div class="form-group">
+                        <label for="settingsName">Full Name</label>
+                        <input type="text" id="settingsName" value="Amar Singh">
+                    </div>
+                    <div class="form-group">
+                        <label for="settingsUsername">Username</label>
+                        <input type="text" id="settingsUsername" value="amar_singh">
+                    </div>
+                    <div class="form-group">
+                        <label for="settingsEmail">Email</label>
+                        <input type="email" id="settingsEmail" value="amar.singh@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="settingsPassword">New Password</label>
+                        <input type="password" id="settingsPassword" placeholder="Leave blank to keep current password">
+                    </div>
+                    <div class="form-group">
+                        <label for="settingsConfirmPassword">Confirm New Password</label>
+                        <input type="password" id="settingsConfirmPassword" placeholder="Leave blank to keep current password">
+                    </div>
+                    
+                    <h3 class="font-bold mb-2 mt-4">Preferences</h3>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="settingsEmailNotifications" checked> 
+                            Receive email notifications
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="settingsPublicProfile" checked> 
+                            Make my profile public
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="settingsDarkMode"> 
+                            Enable dark mode
+                        </label>
+                    </div>
+                    
+                    <button type="button" class="btn btn-primary mt-4" onclick="saveProfileSettings()">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Analytics Page -->
+<div id="analyticsPage" class="container" style="display: none;">
+    <div class="card">
+        <div class="card-header">
+            <div class="flex justify-between items-center">
+                <h2 class="card-title">Analytics Dashboard</h2>
+                <button class="btn btn-outline" onclick="showDashboard()">Back to Dashboard</button>
+            </div>
+        </div>
+        <div class="card-content">
+            <div class="tabs">
+                <div class="tab active" onclick="switchAnalyticsTab('overview')">Overview</div>
+                <div class="tab" onclick="switchAnalyticsTab('performance')">Performance</div>
+                <div class="tab" onclick="switchAnalyticsTab('progress')">Progress</div>
+                <div class="tab" onclick="switchAnalyticsTab('recommendations')">Recommendations</div>
+            </div>
+            
+            <!-- Overview Tab -->
+            <div id="overviewTab" class="tab-content active">
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <div class="analytics-title">Total Score</div>
+                        <div class="analytics-value">750</div>
+                        <div class="analytics-subtitle">Points earned</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-title">Quizzes Completed</div>
+                        <div class="analytics-value">12</div>
+                        <div class="analytics-subtitle">Out of 30 available</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-title">Average Score</div>
+                        <div class="analytics-value">82%</div>
+                        <div class="analytics-subtitle">Across all quizzes</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-title">Current Streak</div>
+                        <div class="analytics-value">3</div>
+                        <div class="analytics-subtitle">Days in a row</div>
+                    </div>
+                </div>
+                
+                <h3 class="font-bold mb-2 mt-4">Recent Activity</h3>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background-color: #f8f9fa; border-bottom: 2px solid #e5e7eb;">
+                            <th style="padding: 12px 15px; text-align: left;">Date</th>
+                            <th style="padding: 12px 15px; text-align: left;">Activity</th>
+                            <th style="padding: 12px 15px; text-align: right;">Points</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #e5e7eb;">
+                            <td style="padding: 12px 15px;">May 19, 2025</td>
+                            <td style="padding: 12px 15px;">Completed Hard Quiz</td>
+                            <td style="padding: 12px 15px; text-align: right;">+85</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e5e7eb;">
+                            <td style="padding: 12px 15px;">May 18, 2025</td>
+                            <td style="padding: 12px 15px;">Earned 'On Fire' Badge</td>
+                            <td style="padding: 12px 15px; text-align: right;">+25</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e5e7eb;">
+                            <td style="padding: 12px 15px;">May 17, 2025</td>
+                            <td style="padding: 12px 15px;">Completed Easy Quiz</td>
+                            <td style="padding: 12px 15px; text-align: right;">+100</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Performance Tab -->
+            <div id="performanceTab" class="tab-content">
+                <h3 class="font-bold mb-2">Performance by Category</h3>
+                <div class="chart-container">
+                    <div style="text-align: center; padding-top: 120px; color: #6b7280;">
+                        Category performance chart will be displayed here
+                    </div>
+                </div>
+                
+                <h3 class="font-bold mb-2 mt-4">Strengths and Weaknesses</h3>
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <div class="analytics-title">Strongest Category</div>
+                        <div class="analytics-value">Science</div>
+                        <div class="analytics-subtitle">95% accuracy</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-title">Weakest Category</div>
+                        <div class="analytics-value">History</div>
+                        <div class="analytics-subtitle">65% accuracy</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-title">Fastest Response</div>
+                        <div class="analytics-value">Science</div>
+                        <div class="analytics-subtitle">8.2s per question</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-title">Slowest Response</div>
+                        <div class="analytics-value">Math</div>
+                        <div class="analytics-subtitle">18.5s per question</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Progress Tab -->
+            <div id="progressTab" class="tab-content">
+                <h3 class="font-bold mb-2">Your Learning Progress</h3>
+                <div class="chart-container">
+                    <div style="text-align: center; padding-top: 120px; color: #6b7280;">
+                        Progress over time chart will be displayed here
+                    </div>
+                </div>
+                
+                <h3 class="font-bold mb-2 mt-4">Completion Status</h3>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background-color: #f8f9fa; border-bottom: 2px solid #e5e7eb;">
+                            <th style="padding: 12px 15px; text-align: left;">Category</th>
+                            <th style="padding: 12px 15px; text-align: center;">Easy</th>
+                            <th style="padding: 12px 15px; text-align: center;">Medium</th>
+                            <th style="padding: 12px 15px; text-align: center;">Hard</th>
+                            <th style="padding: 12px 15px; text-align: right;">Completion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #e5e7eb;">
+                            <td style="padding: 12px 15px;">General Knowledge</td>
+                            <td style="padding: 12px 15px; text-align: center;">✅</td>
+                            <td style="padding: 12px 15px; text-align: center;">✅</td>
+                            <td style="padding: 12px 15px; text-align: center;">❌</td>
+                            <td style="padding: 12px 15px; text-align: right;">67%</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e5e7eb;">
+                            <td style="padding: 12px 15px;">Science</td>
+                            <td style="padding: 12px 15px; text-align: center;">✅</td>
+                            <td style="padding: 12px 15px; text-align: center;">✅</td>
+                            <td style="padding: 12px 15px; text-align: center;">✅</td>
+                            <td style="padding: 12px 15px; text-align: right;">100%</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e5e7eb;">
+                            <td style="padding: 12px 15px;">History</td>
+                            <td style="padding: 12px 15px; text-align: center;">✅</td>
+                            <td style="padding: 12px 15px; text-align: center;">❌</td>
+                            <td style="padding: 12px 15px; text-align: center;">❌</td>
+                            <td style="padding: 12px 15px; text-align: right;">33%</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e5e7eb;">
+                            <td style="padding: 12px 15px;">Mathematics</td>
+                            <td style="padding: 12px 15px; text-align: center;">✅</td>
+                            <td style="padding: 12px 15px; text-align: center;">❌</td>
+                            <td style="padding: 12px 15px; text-align: center;">❌</td>
+                            <td style="padding: 12px 15px; text-align: right;">33%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Recommendations Tab -->
+            <div id="recommendationsTab" class="tab-content">
+                <h3 class="font-bold mb-2">Recommended Quizzes</h3>
+                <div class="card mb-4" style="background-color: #f0f9ff;">
+                    <div class="card-content">
+                        <h4 class="font-bold">History (Medium)</h4>
+                        <p class="text-sm mb-2">Based on your performance, we recommend taking this quiz to improve your history knowledge.</p>
+                        <button class="btn btn-primary btn-sm">Start Quiz</button>
+                    </div>
+                </div>
+                
+                <div class="card mb-4" style="background-color: #f0f9ff;">
+                    <div class="card-content">
+                        <h4 class="font-bold">Mathematics (Medium)</h4>
+                        <p class="text-sm mb-2">This quiz will help strengthen your math skills at the intermediate level.</p>
+                        <button class="btn btn-primary btn-sm">Start Quiz</button>
+                    </div>
+                </div>
+                
+                <div class="card mb-4" style="background-color: #f0f9ff;">
+                    <div class="card-content">
+                        <h4 class="font-bold">General Knowledge (Hard)</h4>
+                        <p class="text-sm mb-2">Challenge yourself with this advanced quiz to complete your general knowledge section.</p>
+                        <button class="btn btn-primary btn-sm">Start Quiz</button>
+                    </div>
+                </div>
+                
+                <h3 class="font-bold mb-2 mt-4">Learning Tips</h3>
+                <div class="card" style="background-color: #f0f9ff;">
+                    <div class="card-content">
+                        <ul style="list-style-type: disc; padding-left: 20px;">
+                            <li class="mb-2">Focus on improving your history knowledge, particularly in ancient civilizations.</li>
+                            <li class="mb-2">Spend more time on math problems to improve your response time.</li>
+                            <li class="mb-2">Try different question types to diversify your learning experience.</li>
+                            <li class="mb-2">Maintain your daily streak to build consistent learning habits.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Notification -->
+<div id="notification" class="notification">
+    <div class="notification-title">Achievement Unlocked!</div>
+    <div class="notification-message">You've earned the "Perfect Score" badge.</div>
+</div>
+</div>
+
+<script>
+// Mock data for users and questions
+const users = [
+{ id: 101, username: "amar_singh", password: "amar123", name: "Amar Singh", email: "amar.singh@example.com", score: 750, quizzes: 12, streak: 3, achievements: ["first_quiz", "on_fire", "perfect_score"] },
+{ id: 1, username: "aman123", password: "aman@456", name: "Aman Singh", email: "aman@example.com", score: 620, quizzes: 8, streak: 1, achievements: ["first_quiz"] },
+{ id: 2, username: "priya87", password: "priya@987", name: "Priya Sharma", email: "priya@example.com", score: 840, quizzes: 15, streak: 5, achievements: ["first_quiz", "on_fire", "perfect_score", "quiz_master"] },
+// More users would be here in a real app
+];
+
+// Sample quiz questions - 30 questions across different types and difficulty levels
+const questions = [
+// Easy Multiple Choice Questions
+{
+    id: 1,
+    difficulty: "easy",
+    type: "multiple-choice",
+    question: "What is the capital of Japan?",
+    options: ["Beijing", "Seoul", "Tokyo", "Bangkok"],
+    correctAnswer: 2
+},
+{
+    id: 2,
+    difficulty: "easy",
+    type: "multiple-choice",
+    question: "Which planet is known as the Red Planet?",
+    options: ["Venus", "Mars", "Jupiter", "Saturn"],
+    correctAnswer: 1
+},
+{
+    id: 3,
+    difficulty: "easy",
+    type: "multiple-choice",
+    question: "What is the largest mammal in the world?",
+    options: ["Elephant", "Blue Whale", "Giraffe", "Hippopotamus"],
+    correctAnswer: 1
+},
+{
+    id: 4,
+    difficulty: "easy",
+    type: "multiple-choice",
+    question: "Which of these is not a primary color?",
+    options: ["Red", "Blue", "Green", "Yellow"],
+    correctAnswer: 2
+},
+{
+    id: 5,
+    difficulty: "easy",
+    type: "multiple-choice",
+    question: "Who wrote 'Romeo and Juliet'?",
+    options: ["Charles Dickens", "William Shakespeare", "Jane Austen", "Mark Twain"],
+    correctAnswer: 1
+},
+
+// Medium Multiple Choice Questions
+{
+    id: 6,
+    difficulty: "medium",
+    type: "multiple-choice",
+    question: "Which element has the chemical symbol 'Au'?",
+    options: ["Silver", "Gold", "Aluminum", "Argon"],
+    correctAnswer: 1
+},
+{
+    id: 7,
+    difficulty: "medium",
+    type: "multiple-choice",
+    question: "In which year did World War I begin?",
+    options: ["1914", "1916", "1918", "1920"],
+    correctAnswer: 0
+},
+{
+    id: 8,
+    difficulty: "medium",
+    type: "multiple-choice",
+    question: "What is the capital of Brazil?",
+    options: ["Rio de Janeiro", "São Paulo", "Brasília", "Salvador"],
+    correctAnswer: 2
+},
+{
+    id: 9,
+    difficulty: "medium",
+    type: "multiple-choice",
+    question: "Which scientist developed the theory of relativity?",
+    options: ["Isaac Newton", "Albert Einstein", "Stephen Hawking", "Niels Bohr"],
+    correctAnswer: 1
+},
+{
+    id: 10,
+    difficulty: "medium",
+    type: "multiple-choice",
+    question: "What is the largest organ in the human body?",
+    options: ["Heart", "Liver", "Skin", "Brain"],
+    correctAnswer: 2
+},
+
+// Hard Multiple Choice Questions
+{
+    id: 11,
+    difficulty: "hard",
+    type: "multiple-choice",
+    question: "What is the half-life of Carbon-14?",
+    options: ["5,730 years", "1,600 years", "10,000 years", "3,500 years"],
+    correctAnswer: 0
+},
+{
+    id: 12,
+    difficulty: "hard",
+    type: "multiple-choice",
+    question: "Which of these is not a type of elementary particle?",
+    options: ["Quark", "Lepton", "Boson", "Neutron"],
+    correctAnswer: 3
+},
+{
+    id: 13,
+    difficulty: "hard",
+    type: "multiple-choice",
+    question: "What is the most abundant element in the universe?",
+    options: ["Helium", "Oxygen", "Hydrogen", "Carbon"],
+    correctAnswer: 2
+},
+{
+    id: 14,
+    difficulty: "hard",
+    type: "multiple-choice",
+    question: "Which scientist proposed the uncertainty principle?",
+    options: ["Niels Bohr", "Werner Heisenberg", "Erwin Schrödinger", "Max Planck"],
+    correctAnswer: 1
+},
+{
+    id: 15,
+    difficulty: "hard",
+    type: "multiple-choice",
+    question: "What is the chemical formula for sulfuric acid?",
+    options: ["H2SO3", "H2SO4", "HSO4", "H2S2O7"],
+    correctAnswer: 1
+},
+
+// True/False Questions
+{
+    id: 16,
+    difficulty: "easy",
+    type: "true-false",
+    question: "The Great Wall of China is visible from space.",
+    correctAnswer: 1 // False
+},
+{
+    id: 17,
+    difficulty: "medium",
+    type: "true-false",
+    question: "Thomas Edison invented the light bulb.",
+    correctAnswer: 1 // False (he improved upon existing designs)
+},
+{
+    id: 18,
+    difficulty: "hard",
+    type: "true-false",
+    question: "Water always boils at 100 degrees Celsius regardless of altitude.",
+    correctAnswer: 1 // False
+},
+{
+    id: 19,
+    difficulty: "medium",
+    type: "true-false",
+    question: "The human body has 206 bones.",
+    correctAnswer: 0 // True
+},
+{
+    id: 20,
+    difficulty: "medium",
+    type: "true-false",
+    question: "Sound travels faster in water than in air.",
+    correctAnswer: 0 // True
+},
+
+// Matching Questions
+{
+    id: 21,
+    difficulty: "easy",
+    type: "matching",
+    question: "Match the countries with their capitals:",
+    items: [
+        { id: 1, left: "France", right: "Paris" },
+        { id: 2, left: "Japan", right: "Tokyo" },
+        { id: 3, left: "Egypt", right: "Cairo" },
+        { id: 4, left: "Australia", right: "Canberra" }
+    ]
+},
+{
+    id: 22,
+    difficulty: "medium",
+    type: "matching",
+    question: "Match the elements with their chemical symbols:",
+    items: [
+        { id: 1, left: "Gold", right: "Au" },
+        { id: 2, left: "Silver", right: "Ag" },
+        { id: 3, left: "Iron", right: "Fe" },
+        { id: 4, left: "Sodium", right: "Na" }
+    ]
+},
+{
+    id: 23,
+    difficulty: "medium",
+    type: "matching",
+    question: "Match the authors with their works:",
+    items: [
+        { id: 1, left: "George Orwell", right: "1984" },
+        { id: 2, left: "J.K. Rowling", right: "Harry Potter" },
+        { id: 3, left: "J.R.R. Tolkien", right: "The Lord of the Rings" },
+        { id: 4, left: "Jane Austen", right: "Pride and Prejudice" }
+    ]
+},
+
+// Fill-in-the-Blank Questions
+{
+    id: 24,
+    difficulty: "easy",
+    type: "fill-blank",
+    question: "The capital of France is _____.",
+    correctAnswer: "Paris"
+},
+{
+    id: 25,
+    difficulty: "medium",
+    type: "fill-blank",
+    question: "Water is composed of hydrogen and _____.",
+    correctAnswer: "oxygen"
+},
+{
+    id: 26,
+    difficulty: "hard",
+    type: "fill-blank",
+    question: "The formula for calculating the area of a circle is π × _____.",
+    correctAnswer: "r²"
+},
+{
+    id: 27,
+    difficulty: "medium",
+    type: "fill-blank",
+    question: "The process by which plants make their own food using sunlight is called _____.",
+    correctAnswer: "photosynthesis"
+},
+{
+    id: 28,
+    difficulty: "easy",
+    type: "fill-blank",
+    question: "The largest ocean on Earth is the _____ Ocean.",
+    correctAnswer: "Pacific"
+},
+{
+    id: 29,
+    difficulty: "medium",
+    type: "fill-blank",
+    question: "The study of the human mind and behavior is called _____.",
+    correctAnswer: "psychology"
+},
+{
+    id: 30,
+    difficulty: "hard",
+    type: "fill-blank",
+    question: "The acceleration due to gravity on Earth is approximately _____ m/s².",
+    correctAnswer: "9.8"
+}
+];
+
+// Generate 100 participants with unique names and random scores
+function generateLeaderboardData(currentUserName = "Amar Singh") {
+const firstNames = [
+    "Amar", "Rahul", "Priya", "Neha", "Vikram", "Ananya", "Arjun", "Divya", 
+    "Karan", "Meera", "Rohan", "Sneha", "Varun", "Pooja", "Aditya", "Nisha", 
+    "Gaurav", "Kavita", "Deepak", "Anjali", "Rajesh", "Sonia", "Amit", "Ritu", 
+    "Vivek", "Swati", "Mohit", "Preeti", "Nitin", "Shikha", "Alok", "Manisha", 
+    "Suresh", "Rekha", "Prakash", "Neetu", "Sanjay", "Geeta", "Ajay", "Sunita", 
+    "Manoj", "Anita", "Vijay", "Seema", "Dinesh", "Rita", "Anil", "Manju", 
+    "Rakesh", "Lata"
+];
+
+const lastNames = [
+    "Singh", "Sharma", "Kumar", "Gupta", "Patel", "Mishra", "Joshi", "Rao", 
+    "Jain", "Mehta", "Verma", "Reddy", "Malhotra", "Tiwari", "Shah", "Gandhi", 
+    "Chopra", "Bose", "Desai", "Nair", "Menon", "Pillai", "Iyer", "Agarwal", 
+    "Banerjee", "Chatterjee", "Das", "Mukherjee", "Sen", "Roy", "Kapoor", "Khanna", 
+    "Bhatia", "Chauhan", "Gill", "Bajwa", "Chawla", "Mehra", "Bedi", "Anand", 
+    "Arora", "Dhawan", "Kaur", "Malik", "Sood", "Ahuja", "Chandra", "Saxena", 
+    "Trivedi", "Vyas"
+];
+
+// Create a set to track used names to avoid duplicates
+const usedNames = new Set();
+
+// Make sure current user is included
+usedNames.add(currentUserName);
+
+const leaderboard = [
+    {
+        id: 1,
+        username: "amar_singh",
+        name: currentUserName,
+        score: Math.floor(Math.random() * 300) + 700, // Give a high score between 700-999
+    }
+];
+
+// Generate 99 more unique participants
+let id = 2;
+while (leaderboard.length < 100) {
+    const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+    const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+    const fullName = `${firstName} ${lastName}`;
+
+    // Skip if this name is already used
+    if (usedNames.has(fullName)) continue;
+
+    usedNames.add(fullName);
+
+    // Generate a username based on the name
+    const username = `${firstName.toLowerCase()}${lastName.toLowerCase().substring(0, 2)}${Math.floor(Math.random() * 100)}`;
+
+    // Generate a random score between 0 and 1000
+    const score = Math.floor(Math.random() * 1000);
+
+    leaderboard.push({
+        id,
+        username,
+        name: fullName,
+        score,
+    });
+
+    id++;
+}
+
+// Sort by score in descending order
+return leaderboard.sort((a, b) => b.score - a.score);
+}
+
+// App state
+let currentUser = null;
+let leaderboardData = [];
+let quizState = {
+difficulty: 'easy',
+type: 'multiple-choice',
+currentQuestion: 0,
+selectedOption: null,
+score: 0,
+answers: [],
+timeLeft: 30,
+quizStarted: false,
+quizQuestions: [],
+timer: null,
+matchingState: {
+    selectedLeft: null,
+    selectedRight: null,
+    matched: []
+}
+};
+
+// Registration state
+let registrationSuccess = false;
+
+// Page navigation functions
+function showWelcomePage() {
+hideAllPages();
+document.getElementById('welcomePage').style.display = 'block';
+}
+
+function showLoginPage() {
+hideAllPages();
+document.getElementById('loginPage').style.display = 'block';
+}
+
+function showRegisterPage() {
+hideAllPages();
+document.getElementById('registerPage').style.display = 'block';
+}
+
+function showDashboard() {
+hideAllPages();
+document.getElementById('dashboardPage').style.display = 'block';
+
+// Update user display name and stats
+if (currentUser) {
+    document.getElementById('userDisplayName').textContent = currentUser.name;
+    document.getElementById('totalScoreValue').textContent = currentUser.score;
+    document.getElementById('quizzesCompletedValue').textContent = currentUser.quizzes;
+    document.getElementById('streakValue').textContent = currentUser.streak;
+    
+    // Update daily challenge timer
+    updateDailyChallengeTimer();
+}
+}
+
+function showQuizStartPage() {
+hideAllPages();
+document.getElementById('quizStartPage').style.display = 'block';
+
+// Update quiz info
+const filteredQuestions = questions.filter(q => q.difficulty === quizState.difficulty && q.type === quizState.type);
+document.getElementById('questionCount').textContent = filteredQuestions.length > 0 ? filteredQuestions.length : 10;
+document.getElementById('difficultyDisplay').textContent = quizState.difficulty.charAt(0).toUpperCase() + quizState.difficulty.slice(1);
+
+// Set default question type
+document.getElementById('questionType').value = 'multiple-choice';
+updateQuizType();
+}
+
+function showQuizPage() {
+hideAllPages();
+document.getElementById('quizPage').style.display = 'block';
+
+// Update quiz UI
+renderCurrentQuestion();
+}
+
+function showResultsPage() {
+hideAllPages();
+document.getElementById('resultsPage').style.display = 'block';
+
+// Update results
+renderResults();
+}
+
+function showLeaderboard() {
+hideAllPages();
+document.getElementById('leaderboardPage').style.display = 'block';
+
+// Update leaderboard
+renderLeaderboard();
+}
+
+function showFeedback() {
+hideAllPages();
+document.getElementById('feedbackPage').style.display = 'block';
+}
+
+function showProfilePage() {
+hideAllPages();
+document.getElementById('profilePage').style.display = 'block';
+
+// Update profile info
+if (currentUser) {
+    document.getElementById('profileName').textContent = currentUser.name;
+    document.getElementById('profileUsername').textContent = '@' + currentUser.username;
+    document.getElementById('profileQuizCount').textContent = currentUser.quizzes;
+    document.getElementById('profileScore').textContent = currentUser.score;
+    
+    // Set avatar initials
+    const initials = currentUser.name.split(' ').map(n => n[0]).join('');
+    document.getElementById('profileAvatar').textContent = initials;
+    
+    // Update settings form
+    document.getElementById('settingsName').value = currentUser.name;
+    document.getElementById('settingsUsername').value = currentUser.username;
+    document.getElementById('settingsEmail').value = currentUser.email;
+}
+
+// Show achievements tab by default
+switchProfileTab('achievements');
+}
+
+function showAnalyticsPage() {
+hideAllPages();
+document.getElementById('analyticsPage').style.display = 'block';
+
+// Show overview tab by default
+switchAnalyticsTab('overview');
+}
+
+function hideAllPages() {
+const pages = [
+    'welcomePage', 'loginPage', 'registerPage', 'dashboardPage',
+    'quizStartPage', 'quizPage', 'resultsPage', 'leaderboardPage', 
+    'feedbackPage', 'profilePage', 'analyticsPage'
+];
+
+pages.forEach(page => {
+    document.getElementById(page).style.display = 'none';
+});
+}
+
+// Authentication functions
+function handleLogin() {
+const username = document.getElementById('username').value;
+const password = document.getElementById('password').value;
+
+// Find user
+const user = users.find(u => u.username === username && u.password === password);
+
+if (user) {
+    currentUser = user;
+    leaderboardData = generateLeaderboardData(user.name);
+    showDashboard();
+} else {
+    const errorDiv = document.getElementById('loginError');
+    errorDiv.textContent = 'Invalid username or password';
+    errorDiv.classList.remove('hidden');
+}
+}
+
+function handleRegister() {
+const fullName = document.getElementById('fullName').value;
+const username = document.getElementById('regUsername').value;
+const email = document.getElementById('email').value;
+const password = document.getElementById('regPassword').value;
+const confirmPassword = document.getElementById('confirmPassword').value;
+
+// Validate form
+const errorDiv = document.getElementById('registerError');
+
+if (password !== confirmPassword) {
+    errorDiv.textContent = 'Passwords do not match';
+    errorDiv.classList.remove('hidden');
+    return;
+}
+
+// Check if username already exists
+if (users.some(u => u.username === username)) {
+    errorDiv.textContent = 'Username already exists';
+    errorDiv.classList.remove('hidden');
+    return;
+}
+
+// Add new user
+const newUser = {
+    id: users.length + 1,
+    username,
+    password,
+    name: fullName,
+    email,
+    score: 0,
+    quizzes: 0,
+    streak: 0,
+    achievements: []
+};
+
+users.push(newUser);
+
+// Set current user and show dashboard
+currentUser = newUser;
+leaderboardData = generateLeaderboardData(newUser.name);
+
+// Show achievement notification for first registration
+showNotification('Welcome!', 'Your account has been created successfully.');
+
+showDashboard();
+}
+
+function handleLogout() {
+currentUser = null;
+showWelcomePage();
+}
+
+// Quiz functions
+function selectQuizDifficulty(difficulty) {
+quizState.difficulty = difficulty;
+showQuizStartPage();
+}
+
+function startQuiz(difficulty) {
+quizState.difficulty = difficulty;
+showQuizStartPage();
+}
+
+function updateQuizType() {
+const typeSelect = document.getElementById('questionType');
+quizState.type = typeSelect.value;
+
+// Update description based on selected type
+const descriptionElement = document.getElementById('quizTypeDescription');
+
+switch(quizState.type) {
+    case 'multiple-choice':
+        descriptionElement.textContent = 'Standard multiple choice questions with four options per question.';
+        break;
+    case 'true-false':
+        descriptionElement.textContent = 'Simple true or false questions to test your knowledge.';
+        break;
+    case 'matching':
+        descriptionElement.textContent = 'Match items in the left column with their corresponding items in the right column.';
+        break;
+    case 'fill-blank':
+        descriptionElement.textContent = 'Complete sentences by filling in the missing words.';
+        break;
+}
+}
+
+function startQuizNow() {
+// Reset quiz state
+quizState.currentQuestion = 0;
+quizState.selectedOption = null;
+quizState.score = 0;
+quizState.answers = [];
+quizState.timeLeft = 30;
+quizState.quizStarted = true;
+quizState.matchingState = {
+    selectedLeft: null,
+    selectedRight: null,
+    matched: []
+};
+
+// Get questions for selected difficulty and type
+quizState.quizQuestions = questions.filter(q => 
+    q.difficulty === quizState.difficulty && 
+    q.type === quizState.type
+);
+
+// If no questions match the criteria, default to multiple choice
+if (quizState.quizQuestions.length === 0) {
+    quizState.quizQuestions = questions.filter(q => 
+        q.difficulty === quizState.difficulty && 
+        q.type === 'multiple-choice'
+    );
+}
+
+// Show quiz page
+showQuizPage();
+
+// Start timer
+startQuizTimer();
+}
+
+function renderCurrentQuestion() {
+const currentQ = quizState.quizQuestions[quizState.currentQuestion];
+const progress = ((quizState.currentQuestion + 1) / quizState.quizQuestions.length) * 100;
+
+// Update question number and progress
+document.getElementById('currentQuestionNum').textContent = quizState.currentQuestion + 1;
+document.getElementById('totalQuestions').textContent = quizState.quizQuestions.length;
+document.getElementById('progressBar').style.width = `${progress}%`;
+
+// Update question text
+document.getElementById('questionText').textContent = currentQ.question;
+
+// Hide all question type containers
+document.getElementById('multipleChoiceOptions').style.display = 'none';
+document.getElementById('trueFalseOptions').style.display = 'none';
+document.getElementById('matchingOptions').style.display = 'none';
+document.getElementById('fillBlankOptions').style.display = 'none';
+
+// Render based on question type
+if (currentQ.type === 'true-false') {
+    renderTrueFalseQuestion(currentQ);
+} else if (currentQ.type === 'matching') {
+    renderMatchingQuestion(currentQ);
+} else if (currentQ.type === 'fill-blank') {
+    renderFillBlankQuestion(currentQ);
+} else {
+    // Default to multiple choice
+    renderMultipleChoiceQuestion(currentQ);
+}
+
+// Update score
+document.getElementById('currentScore').textContent = quizState.score;
+}
+
+function renderMultipleChoiceQuestion(question) {
+const optionsContainer = document.getElementById('multipleChoiceOptions');
+optionsContainer.style.display = 'flex';
+optionsContainer.innerHTML = '';
+
+question.options.forEach((option, index) => {
+    const radioItem = document.createElement('div');
+    radioItem.className = `radio-item ${quizState.selectedOption === index ? 'selected' : ''}`;
+    radioItem.setAttribute('data-option', index);
+    radioItem.innerHTML = `
+        <input type="radio" name="option" id="option-${index}" ${quizState.selectedOption === index ? 'checked' : ''}>
+        <label for="option-${index}">${option}</label>
+    `;
+    
+    radioItem.addEventListener('click', function() {
+        selectOption(index);
+    });
+    
+    optionsContainer.appendChild(radioItem);
+});
+}
+
+function renderTrueFalseQuestion(question) {
+const optionsContainer = document.getElementById('trueFalseOptions');
+optionsContainer.style.display = 'flex';
+
+// Update selected state
+const options = optionsContainer.querySelectorAll('.radio-item');
+options.forEach((option, index) => {
+    option.classList.toggle('selected', quizState.selectedOption === index);
+    const radio = option.querySelector('input[type="radio"]');
+    if (radio) {
+        radio.checked = quizState.selectedOption === index;
+    }
+});
+}
+
+function renderMatchingQuestion(question) {
+const matchingContainer = document.getElementById('matchingOptions');
+matchingContainer.style.display = 'grid';
+matchingContainer.innerHTML = '';
+
+// Create left column
+const leftColumn = document.createElement('div');
+question.items.forEach((item, index) => {
+    const matchItem = document.createElement('div');
+    matchItem.className = `match-item ${quizState.matchingState.selectedLeft === index ? 'selected' : ''} ${quizState.matchingState.matched.includes(index) ? 'matched' : ''}`;
+    matchItem.setAttribute('data-index', index);
+    matchItem.textContent = item.left;
+    
+    if (!quizState.matchingState.matched.includes(index)) {
+        matchItem.addEventListener('click', function() {
+            selectMatchingItem('left', index);
+        });
+    }
+    
+    leftColumn.appendChild(matchItem);
+});
+
+// Create right column
+const rightColumn = document.createElement('div');
+// Shuffle the right items for challenge
+const shuffledRightItems = [...question.items].sort(() => Math.random() - 0.5);
+
+shuffledRightItems.forEach((item, index) => {
+    const originalIndex = question.items.findIndex(i => i.right === item.right);
+    const matchItem = document.createElement('div');
+    matchItem.className = `match-item ${quizState.matchingState.selectedRight === index ? 'selected' : ''} ${quizState.matchingState.matched.includes(originalIndex) ? 'matched' : ''}`;
+    matchItem.setAttribute('data-index', index);
+    matchItem.setAttribute('data-original-index', originalIndex);
+    matchItem.textContent = item.right;
+    
+    if (!quizState.matchingState.matched.includes(originalIndex)) {
+        matchItem.addEventListener('click', function() {
+            selectMatchingItem('right', index, originalIndex);
+        });
+    }
+    
+    rightColumn.appendChild(matchItem);
+});
+
+matchingContainer.appendChild(leftColumn);
+matchingContainer.appendChild(rightColumn);
+}
+
+function renderFillBlankQuestion(question) {
+const fillBlankContainer = document.getElementById('fillBlankOptions');
+fillBlankContainer.style.display = 'block';
+
+// Create the fill-in-the-blank text
+const fillBlankText = document.getElementById('fillBlankText');
+
+// Replace the first occurrence of _____ with an editable span
+fillBlankText.innerHTML = question.question.replace('_____', '<span class="fill-blank" contenteditable="true" id="blankAnswer"></span>');
+
+// Focus on the blank
+setTimeout(() => {
+    const blankElement = document.getElementById('blankAnswer');
+    if (blankElement) {
+        blankElement.focus();
+    }
+}, 100);
+}
+
+function selectOption(optionIndex) {
+quizState.selectedOption = optionIndex;
+
+// Update UI to show selected option
+if (quizState.quizQuestions[quizState.currentQuestion].type === 'true-false') {
+    const optionItems = document.querySelectorAll('#trueFalseOptions .radio-item');
+    optionItems.forEach((item, index) => {
+        item.classList.toggle('selected', index === optionIndex);
+        const radioInput = item.querySelector('input[type="radio"]');
+        if (radioInput) {
+            radioInput.checked = index === optionIndex;
+        }
+    });
+} else {
+    const optionItems = document.querySelectorAll('#multipleChoiceOptions .radio-item');
+    optionItems.forEach(item => {
+        item.classList.remove('selected');
+        const radioInput = item.querySelector('input[type="radio"]');
+        if (radioInput) {
+            radioInput.checked = false;
+        }
+    });
+    
+    const selectedItem = document.querySelector(`#multipleChoiceOptions .radio-item[data-option="${optionIndex}"]`);
+    if (selectedItem) {
+        selectedItem.classList.add('selected');
+        const radioInput = selectedItem.querySelector('input[type="radio"]');
+        if (radioInput) {
+            radioInput.checked = true;
+        }
+    }
+}
+}
+
+function selectMatchingItem(side, index, originalIndex) {
+if (side === 'left') {
+    quizState.matchingState.selectedLeft = index;
+} else {
+    quizState.matchingState.selectedRight = index;
+    quizState.matchingState.selectedRightOriginal = originalIndex;
+}
+
+// Update UI
+renderMatchingQuestion(quizState.quizQuestions[quizState.currentQuestion]);
+
+// Check if both sides are selected
+if (quizState.matchingState.selectedLeft !== null && quizState.matchingState.selectedRight !== null) {
+    // Check if it's a match
+    if (quizState.matchingState.selectedLeft === quizState.matchingState.selectedRightOriginal) {
+        // It's a match!
+        quizState.matchingState.matched.push(quizState.matchingState.selectedLeft);
+        
+        // Reset selections
+        quizState.matchingState.selectedLeft = null;
+        quizState.matchingState.selectedRight = null;
+        
+        // Update UI
+        renderMatchingQuestion(quizState.quizQuestions[quizState.currentQuestion]);
+        
+        // Check if all items are matched
+        const currentQ = quizState.quizQuestions[quizState.currentQuestion];
+        if (quizState.matchingState.matched.length === currentQ.items.length) {
+            // All matched, move to next question
+            quizState.score++;
+            setTimeout(handleNextQuestion, 500);
+        }
+    } else {
+        // Not a match, reset selections after a short delay
+        setTimeout(() => {
+            quizState.matchingState.selectedLeft = null;
+            quizState.matchingState.selectedRight = null;
+            renderMatchingQuestion(quizState.quizQuestions[quizState.currentQuestion]);
+        }, 500);
+    }
+}
+}
+
+function handleNextQuestion() {
+const currentQ = quizState.quizQuestions[quizState.currentQuestion];
+
+// Save the answer based on question type
+let isCorrect = false;
+
+if (currentQ.type === 'matching') {
+    // For matching questions, we've already updated the score when all matches are made
+    isCorrect = quizState.matchingState.matched.length === currentQ.items.length;
+    quizState.answers.push(isCorrect);
+} else if (currentQ.type === 'fill-blank') {
+    // Get the user's answer from the editable span
+    const userAnswer = document.getElementById('blankAnswer').textContent.trim().toLowerCase();
+    isCorrect = userAnswer === currentQ.correctAnswer.toLowerCase();
+    quizState.answers.push(userAnswer);
+    
+    // Update score if answer is correct
+    if (isCorrect) {
+        quizState.score++;
+    }
+} else {
+    // For multiple choice and true/false
+    const answer = quizState.selectedOption !== null ? quizState.selectedOption : -1;
+    quizState.answers.push(answer);
+    
+    // Update score if answer is correct
+    isCorrect = quizState.selectedOption === currentQ.correctAnswer;
+    if (isCorrect) {
+        quizState.score++;
+    }
+}
+
+// Clear the timer
+if (quizState.timer) {
+    clearInterval(quizState.timer);
+}
+
+// Move to next question or finish quiz
+if (quizState.currentQuestion < quizState.quizQuestions.length - 1) {
+    quizState.currentQuestion++;
+    quizState.selectedOption = null;
+    quizState.timeLeft = 30;
+    
+    // Reset matching state for next question
+    quizState.matchingState = {
+        selectedLeft: null,
+        selectedRight: null,
+        matched: []
+    };
+    
+    // Re-render the quiz page
+    renderCurrentQuestion();
+    
+    // Start the timer for the next question
+    startQuizTimer();
+} else {
+    // Quiz finished - update user stats
+    if (currentUser) {
+        currentUser.score += quizState.score;
+        currentUser.quizzes += 1;
+        
+        // Check for achievements
+        checkForAchievements();
+        
+        // Update leaderboard
+        const userIndex = leaderboardData.findIndex(entry => entry.name === currentUser.name);
+        if (userIndex !== -1) {
+            leaderboardData[userIndex].score += quizState.score;
+        }
+        
+        // Sort leaderboard
+        leaderboardData.sort((a, b) => b.score - a.score);
+    }
+    
+    // Navigate to results page
+    showResultsPage();
+}
+}
+
+function startQuizTimer() {
+// Clear any existing timer
+if (quizState.timer) {
+    clearInterval(quizState.timer);
+}
+
+quizState.timer = setInterval(() => {
+    quizState.timeLeft--;
+    
+    // Update the timer display
+    const timerElement = document.getElementById('timer');
+    if (timerElement) {
+        timerElement.textContent = quizState.timeLeft;
+    }
+    
+    // If time runs out, move to next question
+    if (quizState.timeLeft <= 0) {
+        clearInterval(quizState.timer);
+        handleNextQuestion();
+    }
+}, 1000);
+}
+
+function renderResults() {
+const totalQuestions = quizState.quizQuestions.length;
+const percentage = totalQuestions > 0 ? Math.round((quizState.score / totalQuestions) * 100) : 0;
+
+// Update result summary
+document.getElementById('resultPercentage').textContent = `${percentage}%`;
+document.getElementById('finalScore').textContent = quizState.score;
+document.getElementById('totalQuestionsResult').textContent = totalQuestions;
+
+// Calculate and display points
+const basePoints = quizState.score * 10;
+const timeBonus = Math.floor(quizState.score * 1.5);
+const streakBonus = currentUser ? currentUser.streak * 5 : 0;
+const totalPoints = basePoints + timeBonus + streakBonus;
+
+document.getElementById('basePoints').textContent = basePoints;
+document.getElementById('timeBonus').textContent = `+${timeBonus}`;
+document.getElementById('streakBonus').textContent = `+${streakBonus}`;
+document.getElementById('totalPoints').textContent = totalPoints;
+
+// Show achievement alert if a new achievement was unlocked
+if (quizState.newAchievement) {
+    document.getElementById('newAchievementAlert').style.display = 'block';
+    document.getElementById('achievementName').textContent = quizState.newAchievement;
+} else {
+    document.getElementById('newAchievementAlert').style.display = 'none';
+}
+
+// Generate question summary
+let questionSummaryHtml = '';
+
+// Show only first 5 questions for simplicity
+const displayCount = Math.min(5, quizState.quizQuestions.length);
+
+for (let i = 0; i < displayCount; i++) {
+    const question = quizState.quizQuestions[i];
+    const userAnswer = quizState.answers[i];
+    
+    let summaryHtml = `
+        <div class="question-summary">
+            <p class="question-text">${i + 1}. ${question.question}</p>
+            <div>
+    `;
+    
+    if (question.type === 'matching') {
+        summaryHtml += `<p>Matching question - ${userAnswer ? 'All matched correctly' : 'Not all matched correctly'}</p>`;
+    } else if (question.type === 'fill-blank') {
+        const isCorrect = userAnswer.toLowerCase() === question.correctAnswer.toLowerCase();
+        summaryHtml += `
+            <div class="option ${isCorrect ? 'option-correct' : 'option-incorrect'}">
+                Your answer: ${userAnswer || '(No answer)'}
+            </div>
+            ${!isCorrect ? `
+            <div class="option option-correct">
+                Correct answer: ${question.correctAnswer}
+            </div>` : ''}
+        `;
+    } else {
+        // Multiple choice or true/false
+        if (question.type === 'true-false') {
+            summaryHtml += `
+                <div class="option ${userAnswer === 0 ? (question.correctAnswer === 0 ? 'option-correct' : 'option-incorrect') : 'option-normal'}">
+                    True ${userAnswer === 0 ? '(Your Answer)' : ''} ${question.correctAnswer === 0 ? '(Correct Answer)' : ''}
+                </div>
+                <div class="option ${userAnswer === 1 ? (question.correctAnswer === 1 ? 'option-correct' : 'option-incorrect') : 'option-normal'}">
+                    False ${userAnswer === 1 ? '(Your Answer)' : ''} ${question.correctAnswer === 1 ? '(Correct Answer)' : ''}
+                </div>
+            `;
+        } else {
+            // Multiple choice
+            summaryHtml += question.options.map((option, optIndex) => {
+                let optionClass = 'option-normal';
+                let additionalText = '';
+                
+                if (optIndex === question.correctAnswer) {
+                    optionClass = 'option-correct';
+                    additionalText = ' (Correct Answer)';
+                } else if (userAnswer === optIndex) {
+                    optionClass = 'option-incorrect';
+                    additionalText = ' (Your Answer)';
+                }
+                
+                return `
+                    <div class="option ${optionClass}">
+                        ${option}${additionalText}
+                    </div>
+                `;
+            }).join('');
+        }
+    }
+    
+    summaryHtml += `
+            </div>
+        </div>
+    `;
+    
+    questionSummaryHtml += summaryHtml;
+}
+
+if (quizState.quizQuestions.length > displayCount) {
+    questionSummaryHtml += `
+        <p class="text-center text-gray-500">Showing ${displayCount} of ${quizState.quizQuestions.length} questions</p>
+    `;
+}
+
+document.getElementById('questionSummary').innerHTML = questionSummaryHtml;
+}
+
+function renderLeaderboard() {
+// Find current user's rank
+const currentUserRank = leaderboardData.findIndex(entry => entry.name === currentUser.name) + 1;
+
+// Update user rank display
+document.getElementById('userRank').textContent = currentUserRank;
+document.getElementById('totalParticipants').textContent = leaderboardData.length;
+
+// Generate table rows for top 10 players
+let tableRows = '';
+const displayCount = 10; // Show top 10 by default
+
+for (let i = 0; i < displayCount && i < leaderboardData.length; i++) {
+    const entry = leaderboardData[i];
+    const isCurrentUser = entry.name === currentUser.name;
+    const medal = i < 3 ? (i === 0 ? "🥇" : i === 1 ? "🥈" : "🥉") : "";
+    
+    tableRows += `
+        <tr style="background-color: ${isCurrentUser ? '#eff6ff' : i < 3 ? '#fffbeb' : 'white'}; border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 12px 15px; text-align: center; font-weight: bold;">${i + 1} ${medal}</td>
+            <td style="padding: 12px 15px;">${entry.name}</td>
+            <td style="padding: 12px 15px;">${entry.username}</td>
+            <td style="padding: 12px 15px; text-align: right; font-weight: bold;">${entry.score}</td>
+        </tr>
+    `;
+}
+
+document.getElementById('leaderboardTable').innerHTML = tableRows;
+}
+
+function showAllParticipants() {
+const leaderboardTable = document.getElementById('leaderboardTable');
+leaderboardTable.innerHTML = '';
+
+for (let i = 0; i < leaderboardData.length; i++) {
+    const entry = leaderboardData[i];
+    const isCurrentUser = entry.name === currentUser.name;
+    const medal = i < 3 ? (i === 0 ? "🥇" : i === 1 ? "🥈" : "🥉") : "";
+    
+    const row = document.createElement('tr');
+    row.style.backgroundColor = isCurrentUser ? '#eff6ff' : i < 3 ? '#fffbeb' : 'white';
+    row.style.borderBottom = '1px solid #e5e7eb';
+    
+    row.innerHTML = `
+        <td style="padding: 12px 15px; text-align: center; font-weight: bold;">${i + 1} ${medal}</td>
+        <td style="padding: 12px 15px;">${entry.name}</td>
+        <td style="padding: 12px 15px;">${entry.username}</td>
+        <td style="padding: 12px 15px; text-align: right; font-weight: bold;">${entry.score}</td>
+    `;
+    
+    leaderboardTable.appendChild(row);
+}
+
+// Hide the "Show All" button
+document.getElementById('showMoreBtn').style.display = 'none';
+}
+
+function submitFeedback() {
+// Get selected rating
+const ratingInputs = document.querySelectorAll('input[name="rating"]');
+let selectedRating = 3;
+ratingInputs.forEach(input => {
+    if (input.checked) {
+        selectedRating = parseInt(input.value);
+    }
+});
+
+// Get category and comment
+const category = document.getElementById('feedbackCategory').value;
+const comment = document.getElementById('comment').value;
+
+// In a real app, you would send this feedback to a server
+showNotification('Thank You!', `Your feedback has been submitted. You rated us ${selectedRating}/5.`);
+
+// Go back to dashboard
+showDashboard();
+}
+
+function retakeQuiz() {
+// Reset quiz state but keep the same difficulty and type
+const difficulty = quizState.difficulty;
+const type = quizState.type;
+
+quizState = {
+    difficulty,
+    type,
+    currentQuestion: 0,
+    selectedOption: null,
+    score: 0,
+    answers: [],
+    timeLeft: 30,
+    quizStarted: false,
+    quizQuestions: [],
+    timer: null,
+    matchingState: {
+        selectedLeft: null,
+        selectedRight: null,
+        matched: []
+    }
+};
+
+// Start the quiz again
+startQuizNow();
+}
+
+// Tab switching functions
+function switchProfileTab(tabName) {
+// Hide all tab contents
+document.querySelectorAll('#profilePage .tab-content').forEach(tab => {
+    tab.classList.remove('active');
+});
+
+// Deactivate all tabs
+document.querySelectorAll('#profilePage .tab').forEach(tab => {
+    tab.classList.remove('active');
+});
+
+// Activate selected tab
+document.getElementById(`${tabName}Tab`).classList.add('active');
+
+// Activate tab button
+const tabButton = Array.from(document.querySelectorAll('#profilePage .tab')).find(tab => 
+    tab.textContent.toLowerCase() === tabName.charAt(0).toUpperCase() + tabName.slice(1)
+);
+
+if (tabButton) {
+    tabButton.classList.add('active');
+}
+}
+
+function switchAnalyticsTab(tabName) {
+// Hide all tab contents
+document.querySelectorAll('#analyticsPage .tab-content').forEach(tab => {
+    tab.classList.remove('active');
+});
+
+// Deactivate all tabs
+document.querySelectorAll('#analyticsPage .tab').forEach(tab => {
+    tab.classList.remove('active');
+});
+
+// Activate selected tab
+document.getElementById(`${tabName}Tab`).classList.add('active');
+
+// Activate tab button
+const tabButton = Array.from(document.querySelectorAll('#analyticsPage .tab')).find(tab => 
+    tab.textContent.toLowerCase() === tabName.charAt(0).toUpperCase() + tabName.slice(1)
+);
+
+if (tabButton) {
+    tabButton.classList.add('active');
+}
+}
+
+function switchLeaderboardTab(tabName) {
+// Deactivate all tabs
+document.querySelectorAll('#leaderboardPage .tab').forEach(tab => {
+    tab.classList.remove('active');
+});
+
+// Activate tab button
+const tabButton = Array.from(document.querySelectorAll('#leaderboardPage .tab')).find(tab => 
+    tab.textContent.toLowerCase() === tabName.charAt(0).toUpperCase() + tabName.slice(1)
+);
+
+if (tabButton) {
+    tabButton.classList.add('active');
+}
+
+// In a real app, you would filter the leaderboard data based on the selected tab
+// For this demo, we'll just show the same data
+renderLeaderboard();
+}
+
+// Achievement functions
+function checkForAchievements() {
+if (!currentUser) return;
+
+const achievements = currentUser.achievements || [];
+let newAchievement = null;
+
+// Check for first quiz achievement
+if (!achievements.includes('first_quiz')) {
+    achievements.push('first_quiz');
+    newAchievement = 'First Quiz';
+    showNotification('Achievement Unlocked!', 'You completed your first quiz!');
+}
+
+// Check for perfect score achievement
+const percentage = Math.round((quizState.score / quizState.quizQuestions.length) * 100);
+if (percentage === 100 && !achievements.includes('perfect_score')) {
+    achievements.push('perfect_score');
+    newAchievement = 'Perfect Score';
+    showNotification('Achievement Unlocked!', 'You got a perfect score!');
+}
+
+// Check for quiz master achievement (10 quizzes)
+if (currentUser.quizzes >= 10 && !achievements.includes('quiz_master')) {
+    achievements.push('quiz_master');
+    newAchievement = 'Quiz Master';
+    showNotification('Achievement Unlocked!', 'You completed 10 quizzes!');
+}
+
+// Check for streak achievement
+if (currentUser.streak >= 3 && !achievements.includes('on_fire')) {
+    achievements.push('on_fire');
+    newAchievement = 'On Fire';
+    showNotification('Achievement Unlocked!', 'You have a 3-day streak!');
+}
+
+// Update user achievements
+currentUser.achievements = achievements;
+
+// Store the new achievement in quiz state for results page
+quizState.newAchievement = newAchievement;
+}
+
+// Notification functions
+function showNotification(title, message) {
+const notification = document.getElementById('notification');
+const notificationTitle = notification.querySelector('.notification-title');
+const notificationMessage = notification.querySelector('.notification-message');
+
+notificationTitle.textContent = title;
+notificationMessage.textContent = message;
+
+notification.classList.add('show');
+
+setTimeout(() => {
+    notification.classList.remove('show');
+}, 5000);
+}
+
+// Daily challenge functions
+function updateDailyChallengeTimer() {
+// Calculate time until end of day
+const now = new Date();
+const endOfDay = new Date();
+endOfDay.setHours(23, 59, 59, 999);
+
+const timeLeft = endOfDay - now;
+const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+document.getElementById('dailyChallengeTimer').textContent = 
+    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+function startDailyChallenge() {
+// Set up a special daily challenge quiz
+quizState.difficulty = 'medium';
+quizState.type = 'multiple-choice';
+
+// In a real app, you would have special daily challenge questions
+// For this demo, we'll just use the regular questions
+showQuizStartPage();
+}
+
+// Profile settings functions
+function saveProfileSettings() {
+if (!currentUser) return;
+
+// Get form values
+const name = document.getElementById('settingsName').value;
+const username = document.getElementById('settingsUsername').value;
+const email = document.getElementById('settingsEmail').value;
+const password = document.getElementById('settingsPassword').value;
+const confirmPassword = document.getElementById('settingsConfirmPassword').value;
+
+// Validate
+if (password && password !== confirmPassword) {
+    showNotification('Error', 'Passwords do not match');
+    return;
+}
+
+// Update user data
+currentUser.name = name;
+currentUser.username = username;
+currentUser.email = email;
+
+if (password) {
+    currentUser.password = password;
+}
+
+// Update preferences
+const emailNotifications = document.getElementById('settingsEmailNotifications').checked;
+const publicProfile = document.getElementById('settingsPublicProfile').checked;
+const darkMode = document.getElementById('settingsDarkMode').checked;
+
+// In a real app, you would save these preferences
+
+showNotification('Success', 'Your profile has been updated');
+
+// Update profile display
+document.getElementById('profileName').textContent = currentUser.name;
+document.getElementById('profileUsername').textContent = '@' + currentUser.username;
+
+// Set avatar initials
+const initials = currentUser.name.split(' ').map(n => n[0]).join('');
+document.getElementById('profileAvatar').textContent = initials;
+}
+
+// Initialize the app when the page loads
+window.onload = function() {
+showWelcomePage();
+
+// Set up interval for daily challenge timer
+setInterval(updateDailyChallengeTimer, 1000);
+};
+</script>
+</body>
+</html>
