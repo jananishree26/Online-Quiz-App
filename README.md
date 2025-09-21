@@ -11,5 +11,4 @@ The **Online Quiz App Management System** is a database-driven application that 
 
 ## 🛠️ Tech Stack  
 - **Frontend:** HTML, CSS, JavaScript  
-- **Backend:** Java / Python / PHP (your version)  
 - **Database:** MySQL  
